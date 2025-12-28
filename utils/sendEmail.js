@@ -12,7 +12,7 @@ module.exports = async (name, email, phone, message) => {
 });
 
   await transporter.sendMail({
-    from: email,
+    from: `" Contact to Parcharadda" <${process.env.ADMIN_EMAIL}>`,
     to: process.env.ADMIN_EMAIL,
     subject: "New Contact Form Submission",
     text: `
