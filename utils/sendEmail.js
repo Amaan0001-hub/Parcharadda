@@ -23,30 +23,41 @@
 // `,
 //   });
 // };
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 module.exports = async (name, email, phone, message) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: true, // 587 ke liye
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+  try {
+    const client = SibApiV3Sdk.ApiClient.instance;
 
-  await transporter.verify(); 
+    const apiKey = client.authentications["api-key"];
+    apiKey.apiKey = process.env.BREVO_API_KEY;
 
-  await transporter.sendMail({
-    from: `"Contact to Parcharadda" <${process.env.SMTP_USER}>`,
-    to: process.env.ADMIN_EMAIL,
-    subject: "New Contact Form Submission",
-    text: `
+    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+    const sendSmtpEmail = {
+      sender: {
+        email: process.env.ADMIN_EMAIL,
+        name: "Parcharadda Contact",
+      },
+      to: [
+        {
+          email: process.env.ADMIN_EMAIL,
+          name: "Admin",
+        },
+      ],
+      subject: "New Contact Form Submission",
+      textContent: `
 Name: ${name}
 Email: ${email}
 Phone: ${phone}
 Message: ${message}
-`,
-  });
+      `,
+    };
+
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("✅ Email sent successfully via Brevo API");
+
+  } catch (error) {
+    console.error("❌ Brevo Email Error:", error.response?.body || error.message);
+  }
 };
