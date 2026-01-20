@@ -4,13 +4,13 @@ const sendEmail = require("../utils/sendEmail");
 
 exports.submitForm = async (req, res) => {
   try {
-    const { name, email, phone, message } = req.body;
+    const { name, email, phone, message, subject } = req.body;
 
     // 1️⃣ Save to MongoDB
-    await Contact.create({ name, email, phone, message });
+    await Contact.create({ name, email, phone, message, subject });
 
     // 2️⃣ Email
-    await sendEmail(name, email, phone, message);
+    await sendEmail(name, email, phone, message, subject);
 
     // 3️⃣ WhatsApp
     // await sendWhatsApp(name, email, phone, message);
