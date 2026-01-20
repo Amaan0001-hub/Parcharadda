@@ -50,12 +50,12 @@ module.exports = async (name, email, phone, message) => {
 Name: ${name}
 Email: ${email}
 Phone: ${phone}
+Subject: ${subject}
 Message: ${message}
       `,
     };
 
     await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("✅ Email sent successfully via Brevo API");
 
   } catch (error) {
     console.error("❌ Brevo Email Error:", error.response?.body || error.message);
