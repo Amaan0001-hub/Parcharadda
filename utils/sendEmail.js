@@ -25,7 +25,7 @@
 // };
 const SibApiV3Sdk = require("sib-api-v3-sdk");
 
-module.exports = async (name, email, phone, message) => {
+module.exports = async (name, email, phone, message, subject) => {
   try {
     const client = SibApiV3Sdk.ApiClient.instance;
 
